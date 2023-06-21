@@ -1,0 +1,48 @@
+﻿@using BlazorDynamicJsComponent.Shared;
+
+@if (!string.IsNullOrWhiteSpace(html))
+{
+    @((MarkupString)html)
+}
+
+@code {
+    string html;
+
+    protected override void OnInitialized()
+    {
+        switch (Element)
+        {
+            case HtmlElement.button:
+                html = $"<button";
+
+                foreach (KeyValuePair<HtmlElementEvent, string> evnt in Events)
+                {
+                    html += $" {evnt.Key}=\"{evnt.Value}\"";
+                }
+
+                html += $">{Content}</button>";
+                break;
+            case HtmlElement.checkbox:
+                html = $"<input type='checkbox' id='check'";
+
+                foreach (KeyValuePair<HtmlElementEvent, string> evnt in Events)
+                {
+                    html += $" {evnt.Key}=\"{evnt.Value}\"";
+                }
+
+                html += $"> <label for='check'> {Content}</label>";
+                break;
+            default:
+                break;
+        }
+    }
+
+    [Parameter]
+    public HtmlElement Element { get; set; }
+
+    [Parameter]
+    public string Content { get; set; }
+
+    [Parameter]
+    public Dictionary<HtmlElementEvent, string> Events { get; set; }
+}

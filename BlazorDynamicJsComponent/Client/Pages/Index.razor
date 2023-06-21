@@ -1,0 +1,27 @@
+﻿@page "/"
+@using BlazorDynamicJsComponent.Shared
+@using BlazorDynamicJsComponent.Client.Components
+@inject HttpClient Http
+
+<PageTitle>Test Component</PageTitle>
+
+@if (htmlComponents == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (HtmlComponent item in htmlComponents)
+    {
+        <TagComponent Element="item.Element" Content="@(item.Content)" Events="item.Events" /><br /><br />
+    }
+}
+
+@code {
+    private HtmlComponent[] htmlComponents;
+
+    protected override async Task OnInitializedAsync()
+    {
+        htmlComponents = await Http.GetFromJsonAsync<HtmlComponent[]>("HtmlComponents");
+    }
+}
